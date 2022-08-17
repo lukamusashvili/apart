@@ -30,10 +30,12 @@ const app = new Koa();
 const router = new Router();
 
 app
-    .use(cors());
+    .use(cors())
+    .use(auth({user:process.env.APP_USER,pass:process.env.APP_PASS}));
 
 router
     .get('/api', async (ctx, next) => {
+        console.log(credentials)
         ctx.body = '/';
     })
     .get('/api/blogs/:lang', async (ctx, next) => {
@@ -50,6 +52,7 @@ router
     .post('/api/blog', koaBody(), async (ctx, next) => {
         const data = ctx.request.body
         const url = data.url
+        console.log(ctx)
         const blogTitleExists = await blogs.countDocuments({lang:data.lang, url: url})
         if(blogTitleExists == 0){
             insertShop(data)
@@ -101,7 +104,6 @@ async function insertShop(data){
 //#endregion
 
 app
-    .use(auth(credentials))
     .use(router.routes())
     .use(router.allowedMethods())
     .listen(port, () => {
