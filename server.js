@@ -6,6 +6,7 @@ const Router = require('koa-router');
 const koaBody = require('koa-body');
 const axios = require('axios');
 const auth = require('koa-basic-auth');
+const cors = require('@koa/cors');
 const credentials = {user:process.env.APP_USER,pass:process.env.APP_PASS}
 const port = process.env.APP_PORT
 //#endregion
@@ -28,11 +29,13 @@ db.on('open', (err) => console.log('Connection Made!'));
 const app = new Koa();
 const router = new Router();
 
+app
+    .use(cors());
+
 router
     .get('/api', async (ctx, next) => {
         ctx.body = '/';
     })
-
     .get('/api/blogs/:lang', async (ctx, next) => {
         const lang = ctx.params.lang
         const blogsData = await blogs.find({lang: lang},'-_id mainImage lang title text url')
