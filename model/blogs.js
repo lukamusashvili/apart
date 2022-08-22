@@ -3,9 +3,12 @@ const Schema = mongoose.Schema;
 const reqString = {type: String, required: true}
 
 const blogsSchema = new Schema({
-    bannerimg: reqString,
-    header: reqString,
-    description: reqString
+    lang: reqString,
+    mainImage: reqString,
+    images: Array,
+    title: reqString,
+    text: reqString,
+    callonicalUrl: String
 },{collection: 'blogs', timestamps: true});
 
 const blogs = mongoose.model('blogs', blogsSchema);
