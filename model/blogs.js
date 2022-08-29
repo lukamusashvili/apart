@@ -7,6 +7,7 @@ const blogsSchema = new Schema({
     mainImage: reqString,
     images: Array,
     title: reqString,
+    url: reqString,
     text: reqString,
     callonicalUrl: String
 },{collection: 'blogs', timestamps: true});
