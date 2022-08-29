@@ -7,7 +7,6 @@ const koaBody = require('koa-body');
 const axios = require('axios');
 const auth = require('koa-basic-auth');
 const cors = require('@koa/cors');
-const credentials = {user:process.env.APP_USER,pass:process.env.APP_PASS}
 const port = process.env.APP_PORT
 //#endregion
 //#region MongoDB
