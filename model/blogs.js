@@ -5,10 +5,9 @@ const reqString = {type: String, required: true}
 const blogsSchema = new Schema({
     lang: reqString,
     mainImage: reqString,
-    images: Array,
     title: reqString,
     url: reqString,
-    text: reqString,
+    blogContent: reqString,
     callonicalUrl: String
 },{collection: 'blogs', timestamps: true});
 
