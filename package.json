@@ -14,7 +14,7 @@
   "author": "Luka Musashvili",
   "license": "ISC",
   "dependencies": {
-    "@koa/cors": "^3.3.0",
+    "@koa/cors": "^3.4.1",
     "axios": "^0.27.2",
     "dotenv": "^16.0.0",
     "isomorphic-fetch": "^3.0.0",

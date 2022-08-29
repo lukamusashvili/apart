@@ -5,7 +5,6 @@ const Koa = require('koa');
 const Router = require('koa-router');
 const koaBody = require('koa-body');
 const axios = require('axios');
-const auth = require('koa-basic-auth');
 const cors = require('@koa/cors');
 const port = process.env.APP_PORT
 //#endregion
@@ -16,26 +15,37 @@ const db = mongoose.connection;
 const dbUpdate = {useNewUrlParser:true,useUnifiedTopology:true};
 const blogs = require('./model/blogs.js');
 
+mongoose.connect(mongoPath, dbUpdate);
+
+db.on('error', (err) => console.log('Error, DB Not Connected'));
+db.on('connected', () => console.log('Connected to Mongo'));
+db.on('disconnected', (err) => console.log('Mongo is disconnected'));
+db.on('open', (err) => console.log('Connection Made!'));
+
 const app = new Koa();
 const router = new Router();
 
 app
     .use(cors())
-    .use(auth({user:process.env.APP_USER,pass:process.env.APP_PASS}));
 
 router
     .get('/', (ctx, next) => {
         ctx.body = '/';
     })
+    .get('/api/urls/:lang', async (ctx, next) => {
+        const lang = ctx.params.lang
+        const urlsData = await blogs.find({lang: lang},'-_id url')
+        ctx.body = urlsData
+    })
     .get('/api/blogs/:lang', async (ctx, next) => {
         const lang = ctx.params.lang
-        const blogsData = await blogs.find({lang: lang},'-_id mainImage lang title text url')
+        const blogsData = await blogs.find({lang: lang},'-_id mainImage lang title blogContent url')
         ctx.body = blogsData
     })
     .get('/api/blog/:lang/:url', async (ctx, next) => {
         const lang = ctx.params.lang
         const url = ctx.params.url
-        const blogData = await blogs.find({lang: lang,url:url},'-_id mainImage images url callonicalUrl lang title text')
+        const blogData = await blogs.find({lang: lang,url:url},'-_id mainImage images url callonicalUrl lang blogContent text')
         ctx.body = blogData
     })
     .post('/api/blog', koaBody(), async (ctx, next) => {
@@ -70,6 +80,17 @@ router
         console.log(ctx.request.body);
         ctx.body = '/blog/'+ctx.params.id;
     })
+
+async function insertShop(data){
+    await blogs.create(data, (err,result) => {
+        if(err){
+            console.log('error ' + err); 
+        }
+        else{
+            console.log('result ' + result);
+        }
+    })
+}
 
 app
     .use(router.routes())
