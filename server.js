@@ -45,8 +45,10 @@ router
     .get('/api/blog/:lang/:url', async (ctx, next) => {
         const lang = ctx.params.lang
         const url = ctx.params.url
-        const blogData = await blogs.find({lang: lang,url:url},'-_id mainImage images url callonicalUrl lang blogContent text')
-        ctx.body = blogData
+        const blogData = await blogs.find({lang: lang,url:url},'-_id url title mainImage blogContent callonicalUrl lang createdAt')
+        const recentBlogs = await blogs.find({lang: lang, url: { $ne: blogData[0].url }},'-_id url title mainImage createdAt lang').sort({ createdAt: -1 }).limit(2)
+        const request = blogData.concat(recentBlogs)
+        ctx.body = request
     })
     .post('/api/blog', koaBody(), async (ctx, next) => {
         const data = ctx.request.body
