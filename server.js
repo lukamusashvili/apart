@@ -37,9 +37,8 @@ router
         const urlsData = await blogs.find({lang: lang},'-_id url')
         ctx.body = urlsData
     })
-    .get('/api/blogs/:lang', async (ctx, next) => {
-        const lang = ctx.params.lang
-        const blogsData = await blogs.find({lang: lang},'-_id mainImage lang title blogContent url')
+    .get('/api/blogs', async (ctx, next) => {
+        const blogsData = await blogs.find({},'-_id mainImage lang title blogContent url')
         ctx.body = blogsData
     })
     .get('/api/blog/:lang/:url', async (ctx, next) => {
