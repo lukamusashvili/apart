@@ -76,10 +76,18 @@ router
         }
         ctx.body = "The blog has been updated successfully"
     })
-    .del('/blog/:id', koaBody(), (ctx, next) => {
-        console.log(ctx.params.id);
-        console.log(ctx.request.body);
-        ctx.body = '/blog/'+ctx.params.id;
+    .del('/api/blog/:lang/:url', koaBody(), async (ctx, next) => {
+        const lang = ctx.params.lang
+        const url = ctx.params.url
+        await blogs.deleteOne({lang:lang,url:url}), (err,result) => {
+            if(err){
+                console.log('error ' + err); 
+            }
+            else{
+                console.log('result ' + result);
+            }
+        }
+        ctx.body = "The blog has been deleted successfully"
     })
 
 async function insertShop(data){
