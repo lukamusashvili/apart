@@ -8,7 +8,8 @@
     "dev": "node server.js",
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
-    "nodemon": "nodemon server.js"
+    "nodemon": "nodemon server.js",
+    "mongo": "wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -"
   },
   "keywords": [],
   "author": "Luka Musashvili",
