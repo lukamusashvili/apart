@@ -30,7 +30,7 @@ app
 
 router
     .get('/', (ctx, next) => {
-        ctx.body = '/';
+        ctx.body = 'სერვერი გაშვებულია წარმატებით';
     })
     .get('/api/urls/:lang', async (ctx, next) => {
         const lang = ctx.params.lang
@@ -45,9 +45,14 @@ router
         const lang = ctx.params.lang
         const url = ctx.params.url
         const blogData = await blogs.find({lang: lang,url:url},'-_id url title mainImage blogContent callonicalUrl lang createdAt')
-        const recentBlogs = await blogs.find({lang: lang, url: { $ne: blogData[0].url }},'-_id url title mainImage createdAt lang').sort({ createdAt: -1 }).limit(2)
-        const request = blogData.concat(recentBlogs)
-        ctx.body = request
+        if(typeof(blogData[0])==="undefined"){
+            ctx.body = "მსგავსი ბლოგი არ არსებობს"
+        }
+        else{
+            const recentBlogs = await blogs.find({lang: lang, url: { $ne: blogData[0].url }},'-_id url title mainImage createdAt lang').sort({ createdAt: -1 }).limit(2)
+            const request = blogData.concat(recentBlogs)
+            ctx.body = request
+        }
     })
     .post('/api/blog', koaBody(), async (ctx, next) => {
         const data = ctx.request.body
