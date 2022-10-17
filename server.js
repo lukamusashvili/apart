@@ -44,7 +44,7 @@ router
     .get('/api/blog/:lang/:url', async (ctx, next) => {
         const lang = ctx.params.lang
         const url = ctx.params.url
-        const blogData = await blogs.find({lang: lang,url:url},'-_id url title mainImage blogContent callonicalUrl lang createdAt')
+        const blogData = await blogs.find({lang: lang,url:url},'-_id url title mainImage blogContent callonicalUrl meta lang createdAt')
         if(typeof(blogData[0])==="undefined"){
             ctx.body = "მსგავსი ბლოგი არ არსებობს"
         }
@@ -53,6 +53,12 @@ router
             const request = blogData.concat(recentBlogs)
             ctx.body = request
         }
+    })
+    .get('/api/blogonly/:lang/:url', async (ctx, next) => {
+        const lang = ctx.params.lang
+        const url = ctx.params.url
+        const blogData = await blogs.find({lang: lang,url:url},'-_id url title mainImage blogContent callonicalUrl meta lang createdAt')
+        ctx.body = blogData
     })
     .post('/api/blog', koaBody(), async (ctx, next) => {
         const data = ctx.request.body

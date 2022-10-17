@@ -8,7 +8,8 @@ const blogsSchema = new Schema({
     title: reqString,
     url: reqString,
     blogContent: reqString,
-    callonicalUrl: String
+    callonicalUrl: String,
+    meta: String
 },{collection: 'blogs', timestamps: true});
 
 const blogs = mongoose.model('blogs', blogsSchema);
